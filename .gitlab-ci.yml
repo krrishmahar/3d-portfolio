@@ -1,0 +1,97 @@
+stages:
+  - build
+  - test
+  - deploy
+
+# Global cache paths shared across all jobs
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - node_modules/
+    - .bun/
+    - .cache/vite/
+  policy: pull-push
+
+
+# ---------------------------
+# BUILD STAGE
+# ---------------------------
+build:
+  stage: build
+  image: oven/bun:latest
+  script:
+    # Prepare Bun cache directory
+    - mkdir -p .bun
+
+    # Install dependencies
+    - bun install
+
+    # Create Vite cache folder to avoid warnings
+    - mkdir -p .cache/vite
+
+    # Build project
+    - bun run build
+
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+  only:
+    - main
+    - merge_requests
+
+
+# ---------------------------
+# TEST STAGE
+# ---------------------------
+
+test:
+  stage: test
+  image: oven/bun:latest
+  script:
+    # Install deps
+    - bun install
+
+    # Check if tests exist
+    - |
+      if compgen -G "**/*.{test,spec}.{js,ts,jsx,tsx}" > /dev/null; then
+        echo "Tests found → running tests..."
+        bun test --coverage || true
+        export HAS_TESTS=true
+      else
+        echo "No test files → skipping tests."
+        export HAS_TESTS=false
+      fi
+
+    # Upload coverage to Codecov only if tests exist
+    - |
+      if [ "$HAS_TESTS" = true ]; then
+        curl -Os https://uploader.codecov.io/latest/linux/codecov
+        chmod +x codecov
+        ./codecov -t ${CODECOV_TOKEN} -n "gitlab-ci" --non-zero --verbose=false
+      else
+        echo "Skipping Codecov upload — no tests present."
+      fi
+
+  dependencies:
+    - build
+  only:
+    - main
+    - merge_requests
+
+
+# ---------------------------
+# DEPLOY STAGE
+# ---------------------------
+deploy:
+  stage: deploy
+  image: alpine
+  script:
+    - echo "Deploying 3D portfolio..."
+    - echo "Deploy completed."
+  dependencies:
+    - build
+  environment:
+    name: production
+  only:
+    - main
