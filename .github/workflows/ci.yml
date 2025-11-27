@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repo
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Cache Bun installation
+      - name: Cache Bun
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lockb') }}
+
+      # Install Bun
+      - name: Install Bun
+        run: |
+          if [ ! -d "~/.bun" ]; then
+            curl -fsSL https://bun.sh/install | bash
+          fi
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+
+      # Cache node_modules (bun install cache)
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      # Cache Vite build cache
+      - name: Cache Vite
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.vite
+            node_modules/.vite
+          key: vite-${{ runner.os }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: bun install
+
+      # Build
+      - name: Build
+        run: bun run build
+
+      # Run tests + collect coverage
+      - name: Run Tests
+        run: bun test --coverage
+
+      # Upload coverage to Codecov
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: krrishmahar/3d-portfolio
+          file: ./coverage/coverage-final.json
+          fail_ci_if_error: false
+
+      # Upload production build as artifact
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
