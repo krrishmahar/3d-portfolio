@@ -44,9 +44,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/.vite
-            node_modules/.vite
+            **/.vite
           key: vite-${{ runner.os }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          restore-keys: |
+            vite-${{ runner.os }}-
 
       # Install dependencies
       - name: Install Dependencies
@@ -69,6 +70,7 @@ jobs:
           slug: krrishmahar/3d-portfolio
           file: ./coverage/coverage-final.json
           fail_ci_if_error: false
+          verbose: false
 
       # Upload production build as artifact
       - name: Upload Build Artifact
