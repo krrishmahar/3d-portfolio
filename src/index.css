@@ -15,7 +15,7 @@
 
   --breakpoint-xs: 450px;
 
-  --background-image-hero-pattern: url("/src/assets/herobg.png");
+  --background-image-hero-pattern: url("/src/assets/herobg.webp");
 }
 
 * {

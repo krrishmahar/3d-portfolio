@@ -5,7 +5,7 @@ import CanvasLoader from "../Loader";
 import * as THREE from "three";
 import { Environment } from "@react-three/drei";
 
-const Computers = () => {
+const Computers = ({ isMobile }) => {
   const computer = useGLTF("/desktop_pc/scene.gltf");
   return (
     <mesh>
@@ -22,8 +22,8 @@ const Computers = () => {
       />
       <primitive
         object={computer.scene}
-        scale={0.75}
-        position={[0, -3.5, -1.5]}
+        scale={isMobile ? 0.7 : 0.75}
+        position={isMobile ? [0, -3, -2.2] : [0, -3.5, -1.5]}
         rotation={[-0.01, 0.18, -0.1]}
       />
     </mesh>
@@ -31,6 +31,26 @@ const Computers = () => {
 };
 
 const ComputersCanvas = () => {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 500px)").matches
+      : false
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 500px)");
+
+    const handleMediaQueryChange = (event) => {
+      setIsMobile(event.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleMediaQueryChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMediaQueryChange);
+    };
+  }, []);
+  
   return (
     <Canvas
       frameloop="demand"
@@ -46,7 +66,7 @@ const ComputersCanvas = () => {
         />
         <Environment preset="studio" />
         <ambientLight intensity={0.5} />
-        <Computers />
+        <Computers isMobile={isMobile} />
       </Suspense>
       <Preload all />
     </Canvas>
