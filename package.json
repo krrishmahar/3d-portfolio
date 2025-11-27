@@ -15,6 +15,7 @@
     "@react-three/fiber": "^9.4.0",
     "@tailwindcss/cli": "^4.1.17",
     "@tailwindcss/vite": "^4.1.17",
+    "@vitest/coverage-v8": "^4.0.14",
     "framer-motion": "^12.23.24",
     "maath": "^0.10.8",
     "react": "^19.2.0",
@@ -23,7 +24,8 @@
     "react-tilt": "^1.0.2",
     "react-vertical-timeline-component": "^3.5.3",
     "tailwindcss": "^4.1.17",
-    "three": "^0.181.2"
+    "three": "^0.181.2",
+    "vitest": "^4.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
