@@ -2,7 +2,7 @@ import React, { useEffect, useState, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
 import CanvasLoader from "../Loader";
-import * as THREE from "three";
+import { NoToneMapping } from "three";
 import { Environment } from "@react-three/drei";
 
 const Computers = ({ isMobile }) => {
@@ -56,7 +56,7 @@ const ComputersCanvas = () => {
       frameloop="demand"
       shadows
       camera={{ position: [20, 3, 5], fov: 25 }}
-      gl={{ preserveDrawingBuffer: true, toneMapping: THREE.NoToneMapping }}
+      gl={{ preserveDrawingBuffer: true, toneMapping: NoToneMapping }}
     >
       <Suspense fallback={<CanvasLoader />}>
         <OrbitControls
