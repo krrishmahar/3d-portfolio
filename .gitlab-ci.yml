@@ -5,7 +5,7 @@ stages:
 
 # Global cache paths shared across all jobs
 cache:
-  key: "$CI_COMMIT_REF_SLUG"
+  key: "$CI_COMMIT_REF_SLUG-v2"
   paths:
     - node_modules/
     - .bun/

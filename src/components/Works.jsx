@@ -73,13 +73,7 @@ const Works = () => {
           variants={fadeIn("", "", 0.1, 1)}
           className="mt-3 text-secondary text-[17px] max-wl-3xl leading-[30px]"
         >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, quis
-          animi minus amet nesciunt facilis earum nisi sed, excepturi a
-          architecto perspiciatis aut rerum vero voluptatum praesentium
-          recusandae ipsum maiores. Tenetur provident atque architecto fugit!
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit
-          exercitationem maxime corporis suscipit, totam ea, illum ipsa incidunt
-          sint porro id veritatis!
+          Over the years, I’ve built a diverse portfolio of projects spanning web development, DevOps/Infrastructure, machine learning, and end-to-end full-stack systems. Highlights include:
         </motion.p>
       </div>
       <div className="flex">
