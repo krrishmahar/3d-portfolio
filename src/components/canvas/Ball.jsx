@@ -12,7 +12,7 @@ import CanvasLoader from "../Loader";
 
 const Ball = ({ icon }) => {
   const decal = useTexture([icon.icon]);
-  console.log("Icon in IcosahedronMesh:", icon.icon);
+  // console.log("Icon in IcosahedronMesh:", icon.icon);
   return (
     <Float speed={0.75} rotationIntensity={1} floatIntensity={1}>
       <ambientLight intensity={0.5} />
